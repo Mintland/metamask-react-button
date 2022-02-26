@@ -1,5 +1,5 @@
 {
-    "name": "metmask-button",
+    "name": "metamask-react-button",
     "version": "0.1.0",
     "description": "A button for metamask",
     "main": "./lib/cjs/index.js",
@@ -12,7 +12,8 @@
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
         "lint": "npx eslint src/* --fix",
-        "test": "jest"
+        "test": "jest",
+        "deploy": "yarn format:fix && yarn lint && npm publish"
     },
     "author": "",
     "license": "ISC",

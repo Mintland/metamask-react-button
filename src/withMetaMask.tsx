@@ -123,6 +123,7 @@ export default function withMetaMask(WrapperComponent: any) {
                     isConnected={isConnected}
                     error={error}
                     isInstalled={isInstalled}
+                    {...this.props}
                 />
             );
         }
