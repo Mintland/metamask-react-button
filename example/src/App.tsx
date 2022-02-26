@@ -1,6 +1,4 @@
-import './App.css';
-import { withMetaMask } from 'metamask-react'
-
+import { withMetaMask } from "metamask-react";
 
 const Button = (props: any) => {
   console.log(props);
@@ -9,17 +7,16 @@ const Button = (props: any) => {
   const handleClick = async () => {
     const accounts = await requestAccounts();
     console.log(accounts);
-    const signature = await requestSign("Demo")
+    const signature = await requestSign("Demo");
     console.log(signature);
-  }
+  };
 
-  return <button onClick={handleClick}>Click Me</button>
-}
+  return <button onClick={handleClick}>Click Me</button>;
+};
 
 const MetaMaskConnectButton = withMetaMask(Button);
 
 function App() {
-
   return (
     <div className="App">
       <MetaMaskConnectButton />

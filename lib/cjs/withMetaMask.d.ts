@@ -15,8 +15,9 @@ export default function withMetaMask(WrapperComponent: any): {
         provider: ethers.ethers.providers.Web3Provider | undefined;
         componentDidMount(): void;
         send(method: string): Promise<any>;
+        requestChainId(): Promise<any>;
         requestAccounts(): Promise<any>;
-        requestSign(message: string): Promise<string>;
+        requestSign(message: string): Promise<string | -1 | undefined>;
         render(): JSX.Element;
         context: any;
         setState<K extends keyof WithMetaMaskState>(state: WithMetaMaskState | ((prevState: Readonly<WithMetaMaskState>, props: Readonly<any>) => WithMetaMaskState | Pick<WithMetaMaskState, K> | null) | Pick<WithMetaMaskState, K> | null, callback?: (() => void) | undefined): void;

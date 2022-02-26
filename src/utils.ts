@@ -3,9 +3,10 @@
 export const TIMEOUT: number = 3000;
 
 declare global {
-  interface Window {
-    ethereum: any;
-  }
+    // eslint-disable-next-line no-unused-vars
+    interface Window {
+        ethereum: any;
+    }
 }
 
 /**
@@ -15,17 +16,17 @@ declare global {
  * @return {*}  {boolean}
  */
 export function isMultiWalletEnvironment(): boolean {
-  const { ethereum } = window;
+    const { ethereum } = window;
 
-  if (ethereum === undefined) {
-    return false;
-  }
-
-  if (Object.hasOwnProperty.call(ethereum, "providers")) {
-    if (ethereum.providers.length > 1) {
-      return true;
+    if (ethereum === undefined) {
+        return false;
     }
-  }
 
-  return false;
+    if (Object.hasOwnProperty.call(ethereum, "providers")) {
+        if (ethereum.providers.length > 1) {
+            return true;
+        }
+    }
+
+    return false;
 }
