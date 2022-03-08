@@ -1,7 +1,7 @@
 // src/withMetaMask.tsx
 
 import React from "react";
-import * as ethers from "ethers";
+import { ethers } from "ethers";
 import detectWalletProvider, { Wallet } from "./detectWalletProvider";
 
 interface Error {
@@ -19,7 +19,7 @@ export interface WithMetaMaskState {
 export default function withMetaMask(WrapperComponent: any) {
     // eslint-disable-next-line react/display-name
     return class extends React.Component<any, WithMetaMaskState> {
-        provider: ethers.ethers.providers.Web3Provider | undefined = undefined;
+        provider: ethers.providers.Web3Provider | undefined = undefined;
 
         constructor(props: any) {
             super(props);
@@ -29,17 +29,15 @@ export default function withMetaMask(WrapperComponent: any) {
                 isConnected: false,
                 error: undefined,
             };
-
-            this.requestAccounts = this.requestAccounts.bind(this);
-            this.requestSign = this.requestSign.bind(this);
         }
 
         componentDidMount() {
-            console.log(this.context);
-
             detectWalletProvider(Wallet.Metamask)
                 .then((provider) => {
-                    this.provider = new ethers.providers.Web3Provider(provider);
+                    this.provider = new ethers.providers.Web3Provider(
+                        provider,
+                        "any"
+                    );
                     this.setState({
                         isInstalled: true,
                     });
@@ -52,19 +50,15 @@ export default function withMetaMask(WrapperComponent: any) {
                 });
         }
 
-        send(method: string) {
+        send(method: string, params: any = []) {
             if (this.provider === undefined) {
                 throw new Error("MetaMask is not installed");
             }
 
-            return this.provider.send(method, []);
+            return this.provider.send(method, params);
         }
 
-        async requestChainId() {
-            const { isConnected } = this.state;
-
-            if (!isConnected) return -1;
-
+        requestChainId = async () => {
             try {
                 const response = await this.send("eth_chainId");
                 return response;
@@ -74,11 +68,17 @@ export default function withMetaMask(WrapperComponent: any) {
                 });
                 return -1;
             }
-        }
+        };
 
-        async requestAccounts() {
+        requestAccounts = async () => {
             try {
+                this.send("wallet_requestPermissions", [
+                    {
+                        eth_accounts: {},
+                    },
+                ]);
                 const response = await this.send("eth_requestAccounts");
+
                 this.setState({
                     isConnected: true,
                 });
@@ -91,9 +91,9 @@ export default function withMetaMask(WrapperComponent: any) {
                 });
                 return undefined;
             }
-        }
+        };
 
-        async requestSign(message: string) {
+        requestSign = async (message: string) => {
             const { isConnected } = this.state;
 
             if (!isConnected) return -1;
@@ -111,19 +111,21 @@ export default function withMetaMask(WrapperComponent: any) {
                 });
                 return undefined;
             }
-        }
+        };
 
         render() {
+            const props = this.props;
             const { error, isConnected, isInstalled } = this.state;
 
             return (
                 <WrapperComponent
                     requestSign={this.requestSign}
                     requestAccounts={this.requestAccounts}
+                    requestChainId={this.requestChainId}
                     isConnected={isConnected}
                     error={error}
                     isInstalled={isInstalled}
-                    {...this.props}
+                    {...props}
                 />
             );
         }

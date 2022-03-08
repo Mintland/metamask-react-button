@@ -1,10 +1,12 @@
 import { withMetaMask } from "metamask-react";
 
 const Button = (props: any) => {
-    console.log(props);
-    const { requestAccounts, requestSign } = props;
+    // console.log(props);
+    const { requestAccounts, requestChainId, requestSign } = props;
 
     const handleClick = async () => {
+        const chainId = await requestChainId();
+        console.log(chainId);
         const accounts = await requestAccounts();
         console.log(accounts);
         const signature = await requestSign("Demo");

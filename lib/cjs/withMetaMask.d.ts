@@ -1,5 +1,5 @@
 import React from "react";
-import * as ethers from "ethers";
+import { ethers } from "ethers";
 interface Error {
     code: number;
     message: string;
@@ -12,12 +12,12 @@ export interface WithMetaMaskState {
 }
 export default function withMetaMask(WrapperComponent: any): {
     new (props: any): {
-        provider: ethers.ethers.providers.Web3Provider | undefined;
+        provider: ethers.providers.Web3Provider | undefined;
         componentDidMount(): void;
-        send(method: string): Promise<any>;
-        requestChainId(): Promise<any>;
-        requestAccounts(): Promise<any>;
-        requestSign(message: string): Promise<string | -1 | undefined>;
+        send(method: string, params?: any): Promise<any>;
+        requestChainId: () => Promise<any>;
+        requestAccounts: () => Promise<any>;
+        requestSign: (message: string) => Promise<string | -1 | undefined>;
         render(): JSX.Element;
         context: any;
         setState<K extends keyof WithMetaMaskState>(state: WithMetaMaskState | ((prevState: Readonly<WithMetaMaskState>, props: Readonly<any>) => WithMetaMaskState | Pick<WithMetaMaskState, K> | null) | Pick<WithMetaMaskState, K> | null, callback?: (() => void) | undefined): void;
